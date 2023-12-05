@@ -35,7 +35,20 @@ NTSTATUS driver_entry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_pat
 
 	device_object->Flags |= DO_DIRECT_IO;
 	device_object->Flags &= ~DO_DEVICE_INITIALIZING;
+	
+	// Sample example, have fun!
+	int pid = get_process_id("cs2.exe");
+	UNICODE_STRING module_name;
+	RtlInitUnicodeString(&module_name, L"client.dll");
+	uintptr_t client = get_module_base(pid, module_name);
+	int local_health = 0;
+	uintptr_t local_player = 0;
+	read_virtual_memory(pid, client + 0x16C2B18, &local_player, sizeof(uintptr_t));
 
+	read_virtual_memory(pid, local_player + 0x32C,&local_health, sizeof(int));
+
+	message("local_player %p , health %d",local_player, local_health);
+	
 	return STATUS_SUCCESS;
 }
 
