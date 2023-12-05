@@ -3,6 +3,7 @@
 #include "memory/memory.h"
 #include "memory/process.h"
 
+// must change
 UNICODE_STRING device_name = RTL_CONSTANT_STRING(L"\\Device\\infestation");
 UNICODE_STRING device_link = RTL_CONSTANT_STRING(L"\\DosDevices\\infestation");
 PDEVICE_OBJECT device_object;
@@ -61,6 +62,7 @@ NTSTATUS driver_entry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_pat
 //
 //	NTSTATUS status = STATUS_SUCCESS;
 //	__try {
+		// must change
 //		UNICODE_STRING driver_name = RTL_CONSTANT_STRING(L"\\Driver\\infestation");
 //
 //		status = IoCreateDriver(&driver_name, &driver_initialize);
