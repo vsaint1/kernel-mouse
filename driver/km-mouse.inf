@@ -1,0 +1,77 @@
+;
+; km-mouse.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System ; TODO: specify appropriate Class
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=km-mouse.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+km-mouse_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+km-mouse.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%km-mouse.DeviceDesc%=km-mouse_Device, Root\km-mouse ; TODO: edit hw-id
+
+[km-mouse_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+km-mouse.sys
+
+;-------------- Service installation
+[km-mouse_Device.NT.Services]
+AddService = km-mouse,%SPSVCINST_ASSOCSERVICE%, km-mouse_Service_Inst
+
+; -------------- km-mouse driver install sections
+[km-mouse_Service_Inst]
+DisplayName    = %km-mouse.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\km-mouse.sys
+
+;
+;--- km-mouse_Device Coinstaller installation ------
+;
+
+[km-mouse_Device.NT.CoInstallers]
+AddReg=km-mouse_Device_CoInstaller_AddReg
+CopyFiles=km-mouse_Device_CoInstaller_CopyFiles
+
+[km-mouse_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[km-mouse_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[km-mouse_Device.NT.Wdf]
+KmdfService =  km-mouse, km-mouse_wdfsect
+[km-mouse_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "km-mouse Installation Disk"
+km-mouse.DeviceDesc = "km-mouse Device"
+km-mouse.SVCDESC = "km-mouse Service"
