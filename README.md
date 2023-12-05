@@ -39,7 +39,7 @@ The driver can be used in any windows 10/11 versions.
 
 - Build the project
 - Copy the driver to the same folder as the executable
-- Load the driver manually with services or driver mapper
+- Load the driver with the driver mapper
 
 ### 1.2 Loading via service `SC`
 
